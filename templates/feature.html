@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
+	<link rel="stylesheet" href="/static/index.css">
+</head>
+
+<body>
+	<div class="container">
+		{% if test_id %}
+		<h1>ID: {{ test_id }}</h1>
+		{% endif %} 
+
+		{% if data %}
+		<h2>{{ data.feature.name }}</h2>
+
+		<h4>Description:</h4>
+		<p>{{ data.feature.description | safe }}</p>
+
+		{% for part in data.feature.children %}
+		<div>
+			<h3>{{ part.keyword }}</h3>
+
+			{% if part.name %}
+			<p>{{part.name}}</p>
+			{% endif %}
+
+			<h4>Steps: </h4>
+			<ul>
+				{% for step in part.steps %}
+				<li><b>{{step.keyword}}:</b> {{step.text}}</li>
+				{% endfor %}
+			</ul>
+
+			{% if part.examples %}
+			<h4>Examples: </h4>
+
+			{% for table in part.examples %}
+			<h5>{{table.name}}</h5>
+			<p>
+					<table class="ui celled table">
+							<thead>
+								<tr>
+									{% for th in table.tableHeader.cells %}
+									<th>{{th.value}}</th>
+									{% endfor %}
+								</tr>
+							</thead>
+			
+							<tbody>
+								{% for tr in table.tableBody %}
+								<tr>
+									{% for td in tr.cells %}
+									<td>{{td.value}} <b>{{td.json}}</b></td>
+									{% endfor %}
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+			</p>
+			{% endfor %} 
+			{% endif %}
+		</div>
+		{% endfor %} 
+		{% else %}
+		<b>No data provided</b>
+		{% endif %}
+	</div>
+</body>
+
+</html>
